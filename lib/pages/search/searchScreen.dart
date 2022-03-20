@@ -22,7 +22,7 @@ class _SearchScreen extends State<SearchScreen> {
                 searchItem = value;
               });
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
               ),

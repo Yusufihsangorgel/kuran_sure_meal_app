@@ -2,6 +2,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import '../../services/sureServices.dart';
+
 class ReadScreen extends StatelessWidget {
   const ReadScreen({Key? key}) : super(key: key);
 
@@ -9,7 +11,7 @@ class ReadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Expandable Demo"),
+        title: Text("Kuran Sureleri"),
       ),
       body: ExpandableTheme(
         data: const ExpandableThemeData(
@@ -20,7 +22,7 @@ class ReadScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           children: <Widget>[
             Card1(),
-            Card2(),
+            //    Card2(),
             Card3(),
           ],
         ),
@@ -29,7 +31,7 @@ class ReadScreen extends StatelessWidget {
   }
 }
 
-const loremIpsum = "ağla yusuf 3131313213343205972657943y543h5u34543543543543 ";
+const loremIpsum = "buraya sure içeriği gelecek";
 
 class Card1 extends StatelessWidget {
   @override
@@ -61,7 +63,7 @@ class Card1 extends StatelessWidget {
                 header: Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      "ExpandablePanel",
+                      "Fatiha Suresi",
                       style: Theme.of(context).textTheme.bodyText1,
                     )),
                 collapsed: Text(
@@ -102,160 +104,6 @@ class Card1 extends StatelessWidget {
   }
 }
 
-class Card2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    buildImg(Color color, double height) {
-      return SizedBox(
-          height: height,
-          child: Container(
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.rectangle,
-            ),
-          ));
-    }
-
-    buildCollapsed1() {
-      return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Expandable",
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ],
-              ),
-            ),
-          ]);
-    }
-
-    buildCollapsed2() {
-      return buildImg(Colors.lightGreenAccent, 150);
-    }
-
-    buildCollapsed3() {
-      return Container();
-    }
-
-    buildExpanded1() {
-      return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Expandable",
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  Text(
-                    "3 Expandable widgets",
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
-              ),
-            ),
-          ]);
-    }
-
-    buildExpanded2() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(child: buildImg(Colors.lightGreenAccent, 100)),
-              Expanded(child: buildImg(Colors.orange, 100)),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(child: buildImg(Colors.lightBlue, 100)),
-              Expanded(child: buildImg(Colors.cyan, 100)),
-            ],
-          ),
-        ],
-      );
-    }
-
-    buildExpanded3() {
-      return Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              loremIpsum,
-              softWrap: true,
-            ),
-          ],
-        ),
-      );
-    }
-
-    return ExpandableNotifier(
-        child: Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      child: ScrollOnExpand(
-        child: Card(
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expandable(
-                collapsed: buildCollapsed1(),
-                expanded: buildExpanded1(),
-              ),
-              Expandable(
-                collapsed: buildCollapsed2(),
-                expanded: buildExpanded2(),
-              ),
-              Expandable(
-                collapsed: buildCollapsed3(),
-                expanded: buildExpanded3(),
-              ),
-              Divider(
-                height: 1,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Builder(
-                    builder: (context) {
-                      var controller =
-                          ExpandableController.of(context, required: true)!;
-                      return TextButton(
-                        child: Text(
-                          controller.expanded ? "COLLAPSE" : "EXPAND",
-                          style: Theme.of(context)
-                              .textTheme
-                              .button!
-                              .copyWith(color: Colors.deepPurple),
-                        ),
-                        onPressed: () {
-                          controller.toggle();
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    ));
-  }
-}
-
 class Card3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -267,12 +115,38 @@ class Card3 extends StatelessWidget {
     }
 
     buildList() {
-      return Column(
-        children: <Widget>[
-          for (var i in [1, 2, 3, 4]) buildItem("Item ${i}"),
-        ],
+      return FutureBuilder(
+        future: getSureCode(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List ayetList = snapshot.data as List;
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: ayetList.length,
+              itemBuilder: (context, index) {
+                var pCode = ayetList[index];
+                return Column(
+                  children: <Widget>[
+                    for (var i in [1, 2, 3, 4, 5, 6, 7, 8, 9])
+                      buildItem("Ayet ${pCode.ayetID}"),
+                  ],
+                );
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
       );
     }
+
+    /*   buildList() {
+      return Column(
+        children: <Widget>[
+          buildItem("Ayet ${1}"),
+        ],
+      );
+    }*/
 
     return ExpandableNotifier(
         child: Padding(
@@ -308,7 +182,7 @@ class Card3 extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            "Items",
+                            "Ayetler",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
