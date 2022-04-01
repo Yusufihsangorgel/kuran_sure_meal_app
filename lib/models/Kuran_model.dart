@@ -1,26 +1,19 @@
-class KuranResponse {
-  List<KuranList>? kuranList;
-  KuranResponse({this.kuranList});
-  KuranResponse.fromJson(Map<String, dynamic> json) {
-    if (json['kuran'] != null) {
-      kuranList = [];
-      json['kuran'].forEach((a) => kuranList!.add(KuranList.fromJson(a)));
-    }
-  }
-}
+class Kuran {
+  final String ayetId;
+  final String suretur;
+  final String surear;
+  final String sureen;
+  Kuran({
+    required this.ayetId,
+    required this.suretur,
+    required this.surear,
+    required this.sureen,
+  });
 
-class KuranList {
-  String? sureRakam;
-  String? sureAd;
-
-  KuranList({this.sureAd, this.sureRakam});
-  KuranList.fromJson(Map<String, dynamic> json) {
-    for (var i = 0; i < 114; i++) {
-      if (i == 0) {
-        sureAd = json['']['sureaditr'];
-      } else {
-        sureAd = json['$i']['sureaditr'];
-      }
-    }
-  }
+  factory Kuran.fromJson(Map<String, dynamic> json) => Kuran(
+        ayetId: json["ayetID"],
+        suretur: json["suretur"],
+        surear: json["surear"],
+        sureen: json["sureen"],
+      );
 }

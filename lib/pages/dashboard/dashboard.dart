@@ -3,7 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:kuran_sure_meal_app/pages/dashboard/dashboardController.dart';
 import 'package:kuran_sure_meal_app/pages/home/homeScreen.dart';
 import 'package:kuran_sure_meal_app/pages/read/readScreen.dart';
-import 'package:kuran_sure_meal_app/pages/search/searchScreen.dart';
+
 import 'package:kuran_sure_meal_app/pages/settings/settingsScreen.dart';
 
 import '../../navigation/custom_animated_bottom_bar.dart';
@@ -24,12 +24,7 @@ class _MyDashBoardState extends State<MyDashBoard> {
         body: SafeArea(
           child: IndexedStack(
             index: controller.tabIndex,
-            children: [
-              HomeScreen(),
-              SearchScreen(),
-              ReadScreen(),
-              SettingsScreen()
-            ],
+            children: [HomeScreen(), ReadScreen(), SettingsScreen()],
           ),
         ),
         bottomNavigationBar: CustomAnimatedBottomBar(
@@ -45,13 +40,6 @@ class _MyDashBoardState extends State<MyDashBoard> {
               icon: Icon(Icons.apps),
               title: Text('Ana Sayfa'),
               activeColor: Colors.green,
-              inactiveColor: _inactiveColor,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: Icon(Icons.search),
-              title: Text('Arama'),
-              activeColor: Colors.purpleAccent,
               inactiveColor: _inactiveColor,
               textAlign: TextAlign.center,
             ),
