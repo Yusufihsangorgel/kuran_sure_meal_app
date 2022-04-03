@@ -2,6 +2,8 @@
 
 A Quran Surahs Flutter project.
 
-Using API : https://api.ubilisim.com//kuran//sure//(Surah Number)
+Using API : https://api.ubilisim.com//kuran//sure// (Surah Number)
+
+Example API: https://api.ubilisim.com//kuran//sure//1
 
 
