@@ -5,65 +5,81 @@ import 'package:kuran_sure_meal_app/widgets/grid_generator.dart';
 
 final sureView = KuranViewModel();
 
-class ReadScreen extends StatelessWidget {
+class ReadScreen extends StatefulWidget {
   ReadScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-      return RefreshIndicator(
-        onRefresh: () => sureView.getKuran(),
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.green[900],
-              title: sureView.sureAd == ""
-                  ? Text("Kuran Sureleri")
-                  : Text(sureView.sureAd),
-            ),
-            body: sureView.posts.length > 2
-                ? RefreshIndicator(
-                    onRefresh: () => sureView.getKuran(),
-                    child: _buildListView(sureView))
-                : _buildSearchView(sureView)),
-      );
-    });
-  }
+  State<ReadScreen> createState() => _ReadScreenState();
 }
 
-Widget _buildSearchView(KuranViewModel SearchView) {
-  return GridView.builder(
-    itemCount: GridGenerator.buttons.length,
-    itemBuilder: (context, index) {
-      return Observer(
-        builder: (_) {
-          return GridGenerator.buttons[index];
-        },
-      );
-    },
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-    ),
-  );
+class _ReadScreenState extends State<ReadScreen> {
+  @override
+  void initState() {
+    sureView.getKuran();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //sureView.getKuran();
+    return Observer(builder: (_) {
+      return RefreshIndicator(
+          onRefresh: () => sureView.getKuran(),
+          child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.green[900],
+                title: sureView.sureAd == ""
+                    ? Text("Kuran Sureleri")
+                    : Text(sureView.sureAd),
+              ),
+              body: sureView.sureAd == ""
+                  ? Center(
+                      child: Text(
+                      "Lütfen bir sure seçiniz",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ))
+                  : RefreshIndicator(
+                      onRefresh: () => sureView.getKuran(),
+                      child: _buildListView(sureView))));
+    });
+  }
 }
 
 Widget _buildListView(KuranViewModel kuranView) {
   return Observer(
     builder: (_) {
       if (kuranView.isLoading == true) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       } else if (kuranView.isError) {
-        return Center(
-          child: Text(kuranView.errorMessage),
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(kuranView.errorMessage),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                kuranView.getKuran();
+              },
+              child: const Text("Yeniden Dene"),
+            )
+          ],
         );
       } else {
         return ListView.builder(
           itemCount: kuranView.posts.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(kuranView.posts[index].ayetId.toString()),
-              subtitle: Text(kuranView.posts[index].suretur),
+            return Column(
+              children: [
+                Text(kuranView.posts[index].ayetId.toString()),
+                ListTile(
+                  title: Text(kuranView.posts[index].surear),
+                  subtitle: Text(kuranView.posts[index].suretur),
+                  // trailing: Text(kuranView.posts[index].surear),
+                ),
+              ],
             );
           },
         );

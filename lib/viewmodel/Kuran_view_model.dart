@@ -13,16 +13,17 @@ abstract class _KuranViewModelBase with Store {
 
   @action
   getKuran() async {
-    isLoadingToggle(false);
     try {
       isErrorToggle(false);
+      isLoadingToggle(false);
       final _KuranApi = KuranServices();
 
       posts = await _KuranApi.getKuran(sureLink);
 
       posts = await _KuranApi.getKuran(sureLink);
 
-      isLoadingToggle(false);
+      getSure = true;
+      print("girdi kanka aha getsure $getSure");
     } catch (e) {
       isErrorToggle(true);
       Exception();
@@ -31,11 +32,6 @@ abstract class _KuranViewModelBase with Store {
 
   @observable
   int sureLink = 0;
-
-  /* @action
-  void getSureLink(int getLink) {
-    sureLink = getLink;
-  }*/
 
   @observable
   bool getSure = false;
@@ -50,14 +46,18 @@ abstract class _KuranViewModelBase with Store {
       getSure = false;
       sureLink = 0;
       if (sureAd == "") {
-        sureAd += inputSure;
         getSure = true;
+        sureAd += inputSure;
+
         sureLink = getLink;
       }
       print(sureLink);
     } else {
-      sureAd += inputSure;
+      getKuran();
+
       getSure = true;
+      sureAd += inputSure;
+
       sureLink = getLink;
       print(sureLink);
     }
@@ -72,7 +72,7 @@ abstract class _KuranViewModelBase with Store {
   }
 
   @observable
-  bool isLoading = false;
+  bool isLoading = true;
 
   @action
   isLoadingToggle(bool value) {

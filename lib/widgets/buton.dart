@@ -1,6 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class Buton extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kuran_sure_meal_app/pages/read/readScreen.dart';
+
+class Buton extends StatefulWidget {
   final void Function() onTap;
   final String sureAd;
   const Buton({
@@ -10,9 +14,30 @@ class Buton extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<Buton> createState() => _ButonState();
+}
+
+class _ButonState extends State<Buton> {
+  void sureAndGo() async {
+    await sureView.getKuran();
+    Get.to(ReadScreen());
+    /*Timer.periodic(Duration(seconds: 3), (timer) {
+      Get.to(ReadScreen());
+    });*/
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        widget.onTap();
+        sureAndGo();
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
@@ -20,12 +45,16 @@ class Buton extends StatelessWidget {
           child: Container(
             color: Colors.green,
             child: Center(
-              child: Text(
-                sureAd,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                ),
+              child: TextButton(
+                onPressed: () {
+                  widget.onTap();
+                  sureAndGo();
+                },
+                child: Text(widget.sureAd,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                    )),
               ),
             ),
           ),

@@ -4,8 +4,6 @@ import 'package:kuran_sure_meal_app/pages/dashboard/dashboardController.dart';
 import 'package:kuran_sure_meal_app/pages/home/homeScreen.dart';
 import 'package:kuran_sure_meal_app/pages/read/readScreen.dart';
 
-import 'package:kuran_sure_meal_app/pages/settings/settingsScreen.dart';
-
 import '../../navigation/custom_animated_bottom_bar.dart';
 
 class MyDashBoard extends StatefulWidget {
@@ -24,7 +22,7 @@ class _MyDashBoardState extends State<MyDashBoard> {
         body: SafeArea(
           child: IndexedStack(
             index: controller.tabIndex,
-            children: [HomeScreen(), ReadScreen(), SettingsScreen()],
+            children: [HomeScreen(), ReadScreen()],
           ),
         ),
         bottomNavigationBar: CustomAnimatedBottomBar(
@@ -52,13 +50,6 @@ class _MyDashBoardState extends State<MyDashBoard> {
               inactiveColor: _inactiveColor,
               textAlign: TextAlign.center,
             ),
-            BottomNavyBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Ayarlar'),
-              activeColor: Colors.blue,
-              inactiveColor: _inactiveColor,
-              textAlign: TextAlign.center,
-            ),
           ],
         ),
       );
@@ -69,7 +60,6 @@ class _MyDashBoardState extends State<MyDashBoard> {
     List<Widget> pages = [
       HomeScreen(),
       ReadScreen(),
-      SettingsScreen(),
     ];
     return IndexedStack(
       index: _currentIndex,
