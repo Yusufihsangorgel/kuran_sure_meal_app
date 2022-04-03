@@ -31,6 +31,26 @@ abstract class _KuranViewModelBase with Store {
   }
 
   @observable
+  bool turkish = true;
+
+  @observable
+  bool english = false;
+
+  @action
+  getTurkish() {
+    turkish = true;
+    english = false;
+    print("turkish $turkish");
+  }
+
+  @action
+  getEnglish() {
+    english = true;
+    turkish = false;
+    print("english $english");
+  }
+
+  @observable
   int sureLink = 0;
 
   @observable
